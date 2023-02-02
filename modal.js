@@ -21,3 +21,18 @@ function launchModal() {
 }
 
 
+
+//issue 1
+
+// déclencher la fermeture du formulaire
+//selectionner et enregistrer le bouton close dans la constante
+const closeBtn = document.querySelector(".close");
+
+closeBtn.addEventListener("click", fermerFormulaire);
+
+// fermer le formulaire
+function fermerFormulaire(){
+  modalbg.style.display = "none";
+}
+
+//issue 2
