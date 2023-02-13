@@ -167,15 +167,6 @@ function verificationChamps(prenom, nom, email, naissance, nbrTournoi, location,
       succesEvenement(conditionPourAttribut);
       break;
   };
-    //erreur au checkbox non coché des conditions
-    switch (true) {
-      case selectCondition == "":
-        erreurEvenement(conditionPourAttribut, "Veuillez confirmer votre accord des conditions d'utilisation");
-        break;
-      default:
-        succesEvenement(conditionPourAttribut);
-        break;
-    };
 
   //écriture des actions de la fonction pour gerer les erreurs
   function erreurEvenement(inputErreur, message) {
