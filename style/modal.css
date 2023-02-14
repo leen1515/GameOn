@@ -216,7 +216,7 @@ input {
   margin-top: 7px;
   padding-top: 5px;
   margin-bottom: 7px;
-  text-align: right;
+  text-align: left;
   line-height: 0.5;
   opacity: 0;
   animation-name: opaciteProgressive;
@@ -231,7 +231,7 @@ input {
   margin-top: 7px;
   padding-top: 5px;
   margin-bottom: 7px;
-  text-align: right;
+  text-align: left;
   line-height: 0.3;
   opacity: 0;
   animation-name: opaciteProgressive;
