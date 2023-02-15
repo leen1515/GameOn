@@ -9,28 +9,44 @@ function editNav() {
 
 // DOM Elements
 const modalbg = document.querySelector(".bground");
+const modalContent = document.querySelectorAll(".formData");//recupere dans le dom les elelments de lac lasse *formData
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-
+const boutonFermer = document.querySelector(".close"); //bouton fermer
+const btnSignup = document.querySelector(".btn-signup");
+const formConfirmation = document.querySelector(".formConfirmation"); // selectionner la page de confirmation de l'enregistrement
+const boutonValidation = document.getElementById("valider"); //bouton valider
+const boutonQuitter = document.getElementById("quitter");
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", lancerFormulaire));
 
 // launch modal form
 function lancerFormulaire() {
-  modalbg.style.display = "block";
+  modalbg.style.visibility = "visible";
+  modalContent.forEach((form) => form.style.visibility = "visible");
+  boutonValidation.style.visibility = "visible";
 }
 
 // fermer le formulaire
 function fermerFormulaire() {
-  modalbg.style.display = "none";
+  modalbg.style.visibility = "hidden";
+  formConfirmation.style.visibility = "hidden";
+  boutonValidation.style.visibility = "hidden";
+  modalContent.forEach((form) => form.style.visibility = "hidden");//realise une boucle au sein de tous les elements de la classe selectionnée
 }
 // déclencher la fermeture du formulaire
-//selectionner et enregistrer le bouton close dans la constante
-const boutonFermer = document.querySelector(".close");
 
 boutonFermer.addEventListener("click", fermerFormulaire);
+boutonQuitter.addEventListener("click", fermerFormulaire);
 
-const formulaireValidation = document.getElementById("valider");
+//confirmer le formulaire
+function confirmerFormulaire(){
+  formConfirmation.style.visibility = "visible";
+  modalbg.style.visibility = "visible";
+  modalContent.forEach((form) => form.style.visibility = "hidden");
+  boutonValidation.style.visibility = "hidden";
+}
+
 
 //la date de naissance ne doit pas ultérieur à la date ou l'utilisateur utilise le formulaire
 const date = new Date(); //vérification de la date de naissance à partir du jour actuel
@@ -124,7 +140,7 @@ function verificationChamps(
       pasValide++; // on modifier le compteur pour l'incrémenter de 1 quand il y a une erreur
       break; //on stoppe à la rencontre de chaque erreur
     case !verifierChamps(prenomValeur): //on test en passant en argument la variable prenomValeur et si ca retourne vrai donc faux avec ! :
-      erreurEvenement(prenom, "+ 2 caractères de A à Z acceptés"); //on appelle la fonction d'erreur en passant en argument a variable de l'id du champ prenom et le message d'erreur
+      erreurEvenement(prenom, "+ 2 caractères de A à Z acceptés"); //on appelle la fonction d'erreur en passant en argument la variable de l'id du champ prenom et le message d'erreur
       pasValide++;
       break;
     default:
@@ -252,7 +268,7 @@ function verificationChamps(
       return "accepte d'être averti";
     }
   }
-//si le compteur pasValide est audessus de 1 ou egale, j'arrete tout et j'affiche dans le console.log un message
+//si le compteur *pasValide est au-dessus de 1 ou egale, j'arrete tout et j'affiche dans le *console.log un message
   if (pasValide >= 1) {
     console.log("Pas valide : recommence ");
   } 
@@ -266,9 +282,7 @@ function verificationChamps(
         " - " +
         emailValeur +
         " - " +
-        " - " +
         naissanceValeur +
-        " - " +
         " - tournoi de participé : " +
         nbrTournoiValeur +
         " - " +
@@ -279,8 +293,9 @@ function verificationChamps(
         " - " +
         avertiVraiOuFaux(averti)
     );
+    confirmerFormulaire();
   }
 }
 
-//appelle de la fonction *valider avec un écouteur d'évènement sur le bouton.
-formulaireValidation.addEventListener("click", valider);
+//appelle de la fonction *valider avec un écouteur d'évènement sur le bouton
+boutonValidation.addEventListener("click", valider);
