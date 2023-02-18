@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="utf-8" />
     <title>Reservation</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="stylesheet" href="./style/modal.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta name="viewport"
+      content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet"
+      href="./style/modal.css" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="preconnect"
+      href="https://fonts.googleapis.com" />
+    <link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,700&family=Shrikhand&display=swap"
-      rel="stylesheet"
-    />
+      rel="stylesheet" />
   </head>
+
   <body>
-    <div class="topnav" id="myTopnav">
+    <div class="topnav"
+      id="myTopnav">
       <div class="header-logo">
-        <img alt="logo" src="./images/Logo.png" />
+        <img alt="logo"
+          src="./images/Logo.png" />
       </div>
       <div class="main-navbar">
-        <a href="#" class="active"><span>Accueil</span></a>
+        <a href="#"
+          class="active"><span>Accueil</span></a>
         <a href="#"><span>Détails de l'évènement</span></a>
         <a href="#"><span>À propos</span></a>
         <a href="#"><span>Contact</span></a>
         <a href="#"><span>Évènements passés</span></a>
-        <a href="javascript:void(0);" class="icon" onclick="editNav()">
+        <a href="javascript:void(0);"
+          class="icon"
+          onclick="editNav()">
           <i class="fa fa-bars"></i>
         </a>
       </div>
@@ -47,7 +56,8 @@
           <button class="btn-signup modal-btn">je m'inscris</button>
         </div>
         <div class="hero-img">
-          <img src="./images/bg_img.jpg" alt="img" />
+          <img src="./images/bg_img.jpg"
+            alt="img" />
         </div>
         <button class="btn-signup modal-btn">je m'inscris</button>
       </div>
@@ -59,192 +69,152 @@
             <form name="reserve">
               <div class="formData">
                 <!--ajout de for pour le label-->
-                <label for="first"><span class="text-label">Prénom</span></label
-                ><br />
-                <input
-                  class="text-control"
+                <label for="first"><span class="text-label">Prénom</span></label><br />
+                <input class="text-control"
                   type="text"
                   id="first"
                   name="first"
                   minlength="2"
-                  required
-                /><br />
+                  required /><br />
               </div>
               <div class="formData">
-                <label for="last"><span class="text-label">Nom</span></label
-                ><br />
-                <input
-                  class="text-control"
+                <label for="last"><span class="text-label">Nom</span></label><br />
+                <input class="text-control"
                   type="text"
                   id="last"
                   name="last"
                   minlength="2"
-                  required
-                /><br />
+                  required /><br />
               </div>
               <div class="formData">
-                <label for="email"><span class="text-label">E-mail</span></label
-                ><br />
+                <label for="email"><span class="text-label">E-mail</span></label><br />
 
                 <!--ajout de pattern-->
-                <input
-                  class="text-control"
+                <input class="text-control"
                   type="email"
                   id="email"
                   name="email"
                   pattern="[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}"
                   size="30"
-                  required
-                /><br />
+                  required /><br />
               </div>
               <div class="formData">
-                <label for="birthdate"
-                  ><span class="text-label">Date de naissance</span></label
-                ><br />
-                <input
-                  class="text-control"
+                <label for="birthdate"><span class="text-label">Date de naissance</span></label><br />
+                <input class="text-control"
                   type="date"
                   id="birthdate"
                   name="birthdate"
                   max=""
-                  required
-                /><br />
+                  required /><br />
               </div>
               <div class="formData">
-                <label for="quantity"
-                  ><span class="text-label"
-                    >À combien de tournois GameOn avez-vous déjà participé
-                    ?</span
-                  ></label
-                ><br />
-                <input
-                  type="number"
+                <label for="quantity"><span class="text-label">À combien de tournois GameOn avez-vous déjà participé
+                    ?</span></label><br />
+                <input type="number"
                   class="text-control"
                   id="quantity"
                   name="quantity"
                   min="0"
                   max="99"
                   value="0"
-                  required
-                />
-                <span class="text-label"
-                >A quel tournoi souhaitez-vous participer cette année ?</span
-              >
+                  required />
+
               </div>
               <div class="formData">
-                <input
-                  class="checkbox-input"
+                <span class="text-label">A quel tournoi souhaitez-vous participer cette année ?</span>
+                <input class="checkbox-input"
                   type="radio"
                   id="location1"
                   name="location"
-                  value="New York"
-                />
-                <label class="checkbox-label" for="location1">
+                  value="New York" />
+                <label class="checkbox-label"
+                  for="location1">
                   <span class="checkbox-icon"></span>
-                  <span class="text-label"> New York</span></label
-                >
-                <input
-                  class="checkbox-input"
+                  <span class="text-label"> New York</span></label>
+                <input class="checkbox-input"
                   type="radio"
                   id="location2"
                   name="location"
-                  value="San Francisco"
-                />
-                <label class="checkbox-label" for="location2">
+                  value="San Francisco" />
+                <label class="checkbox-label"
+                  for="location2">
                   <span class="checkbox-icon"></span>
-                  <span class="text-label">San Francisco</span></label
-                >
-                <input
-                  class="checkbox-input"
+                  <span class="text-label">San Francisco</span></label>
+                <input class="checkbox-input"
                   type="radio"
                   id="location3"
                   name="location"
-                  value="Seattle"
-                />
-                <label class="checkbox-label" for="location3">
+                  value="Seattle" />
+                <label class="checkbox-label"
+                  for="location3">
                   <span class="checkbox-icon"></span>
-                  Seattle</label
-                >
-                <input
-                  class="checkbox-input"
+                  Seattle</label>
+                <input class="checkbox-input"
                   type="radio"
                   id="location4"
                   name="location"
-                  value="Chicago"
-                />
-                <label class="checkbox-label" for="location4">
+                  value="Chicago" />
+                <label class="checkbox-label"
+                  for="location4">
                   <span class="checkbox-icon"></span>
-                  <span class="text-label">Chicago</span></label
-                >
-                <input
-                  class="checkbox-input"
+                  <span class="text-label">Chicago</span></label>
+                <input class="checkbox-input"
                   type="radio"
                   id="location5"
                   name="location"
-                  value="Boston"
-                />
-                <label class="checkbox-label" for="location5">
+                  value="Boston" />
+                <label class="checkbox-label"
+                  for="location5">
                   <span class="checkbox-icon"></span>
-                  <span class="text-label">Boston</span></label
-                >
-                <input
-                  class="checkbox-input"
+                  <span class="text-label">Boston</span></label>
+                <input class="checkbox-input"
                   type="radio"
                   id="location6"
                   name="location"
-                  value="Portland"
-                />
-                <label class="checkbox-label" for="location6">
+                  value="Portland" />
+                <label class="checkbox-label"
+                  for="location6">
                   <span class="checkbox-icon"></span>
-                  <span class="text-label">Portland</span></label
-                >
+                  <span class="text-label">Portland</span></label>
               </div>
 
               <div class="formData">
-                <input
-                  class="checkbox-input"
+                <input class="checkbox-input"
                   type="checkbox"
                   id="checkbox1"
                   name="condition"
                   checked
-                  required
-                />
-                <label class="checkbox2-label" for="checkbox1">
+                  required />
+                <label class="checkbox2-label"
+                  for="checkbox1">
                   <span class="checkbox-icon"></span>
-                  <span class="text-label"
-                    >J'ai lu et accepté les conditions d'utilisation.</span
-                  >
+                  <span class="text-label">J'ai lu et accepté les conditions d'utilisation.</span>
                 </label>
-                <br />
-                <input
-                  class="checkbox-input"
+              </div>
+              <br />
+              <div class="formData">
+                <input class="checkbox-input"
                   type="checkbox"
                   id="checkbox2"
-                  name="enregistre"
-                />
-                <label class="checkbox2-label" for="checkbox2">
+                  name="enregistre" />
+                <label class="checkbox2-label"
+                  for="checkbox2">
                   <span class="checkbox-icon"></span>
-                  <span class="text-label"
-                    >Je souhaite être prévenu des prochains évènements.</span
-                  >
+                  <span class="text-label">Je souhaite être prévenu des prochains évènements.</span>
                 </label>
                 <br />
               </div>
-              <input
-                class="btn-submit button"
+              <input class="btn-submit button"
                 name="submit"
                 id="valider"
-                value="envoyer"
-              />
+                value="envoyer" />
             </form>
             <div class="formConfirmation">
               <span class="text-merci">Merci pour votre inscription</span>
-              <input
-                class="btn-signup button"
+              <input class="btn-signup button"
                 name="submit"
                 id="quitter"
-                value="Fermer"
-              />
+                value="Fermer" />
             </div>
           </div>
         </div>
@@ -255,4 +225,5 @@
     </footer>
     <script src="./js/modal.js"></script>
   </body>
+
 </html>

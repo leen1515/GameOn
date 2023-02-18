@@ -8,10 +8,9 @@ function editNav() {
 }
 
 // DOM Elements
-const modalbg = document.querySelector(".bground");
-const modalContent = document.querySelectorAll(".formData");//recupere dans le dom les elelments de lac lasse *formData
+const modalbg = document.querySelector(".bground");//recupere la base du formulaire
+const modalContent = document.querySelectorAll(".formData"); //recupere dans le dom les elements de laclasse *formData
 const modalBtn = document.querySelectorAll(".modal-btn");
-const formData = document.querySelectorAll(".formData");
 const boutonFermer = document.querySelector(".close"); //bouton fermer
 const btnSignup = document.querySelector(".btn-signup");
 const formConfirmation = document.querySelector(".formConfirmation"); // selectionner la page de confirmation de l'enregistrement
@@ -23,7 +22,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", lancerFormulaire));
 // launch modal form
 function lancerFormulaire() {
   modalbg.style.visibility = "visible";
-  modalContent.forEach((form) => form.style.visibility = "visible");
+  modalContent.forEach((form) => (form.style.visibility = "visible"));
   boutonValidation.style.visibility = "visible";
 }
 
@@ -32,7 +31,7 @@ function fermerFormulaire() {
   modalbg.style.visibility = "hidden";
   formConfirmation.style.visibility = "hidden";
   boutonValidation.style.visibility = "hidden";
-  modalContent.forEach((form) => form.style.visibility = "hidden");//realise une boucle au sein de tous les elements de la classe selectionnée
+  modalContent.forEach((form) => (form.style.visibility = "hidden")); //realise une boucle au sein de tous les elements de la classe selectionnée
 }
 // déclencher la fermeture du formulaire
 
@@ -40,13 +39,12 @@ boutonFermer.addEventListener("click", fermerFormulaire);
 boutonQuitter.addEventListener("click", fermerFormulaire);
 
 //confirmer le formulaire
-function confirmerFormulaire(){
+function confirmerFormulaire() {
   formConfirmation.style.visibility = "visible";
   modalbg.style.visibility = "visible";
-  modalContent.forEach((form) => form.style.visibility = "hidden");
+  modalContent.forEach((form) => (form.style.visibility = "hidden"));
   boutonValidation.style.visibility = "hidden";
 }
-
 
 //la date de naissance ne doit pas ultérieur à la date ou l'utilisateur utilise le formulaire
 const date = new Date(); //vérification de la date de naissance à partir du jour actuel
@@ -62,240 +60,208 @@ document.forms.reserve.birthdate.max =
   "-" +
   ("0" + jourActuel).slice(-2);
 
+//création d'une classe pour validé les objets verifier, le constructor construit les proprietes que le nouvel objet alimentera et les lies à lui meme
+class valeurVerifiee {
+  constructor(titreStringChamps, titreChamps, genreChamps, valide) {
+    this.titreString = titreStringChamps;//l'intitulé du champs pour lire les retours en string proprement
+    this.titre = titreChamps;// les données issues querySelector, il va récuperer les id, name, ou .class du dom
+    this.genre = genreChamps; //le type de l'objet a verifier : une valeur string ou nombre ne sera pas traité pareil
+    this.valide = valide; // pour un retour booleen de la validée de l'objet
+  }
+  //on commence par les methodes de verification :
+  //verification des entrees string
+  verifierString() {
+    return /^([a-zA-Z]{2,})+$/.test(this.titre.value); //vérification de l'alphabet avec les patterns Regex, de a-A jusqu'à z-Z pour le prénom et le nom, minimum 2 caractères
+  }
+  //verification des entrees emails
+  verifierEmail() {
+    return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}$/.test(
+      this.titre.value
+    ); //verification du format de l'email avec les patterns Regex minimum 2 caractères, maximum 15 caracteres
+  }
+
+  //methode d'erreur avec en argument le message d'erreur recupéré du filtre par type de données
+  erreurEvenement(message) {
+    const parentTitre = this.titre.parentElement; // recuperer le parent de l'élément
+    //pour profiter des pseudo-elements ::after déjà présent dans le css :
+    //verification des messages d'erreur et action des evenements qui en découle
+    if (message === "Parfait!") {
+      parentTitre.setAttribute("data-succes", message),//on profite de l'attribut déjà présent dans le css d'origine avec le pseudo-eement ::after
+        parentTitre.removeAttribute("data-error-visible"),
+        parentTitre.removeAttribute("data-error");//pour enlever l'attribut *data-error ainsi on change de couleur la police
+    } else {
+      parentTitre.removeAttribute("data-succes"),//en cas de contradiction de la condition, on fait l'inverse
+        parentTitre.setAttribute("data-error", message),//on installe l'attribut data-error
+        parentTitre.setAttribute("data-error-visible", true);// pour mettre l'attribut *data-error-visible pour profiter du css qui met les bords en rouge
+    }
+  }
+
+  //la méthode erreurGenre va retourner un message et un etat valide booleen selon le type de l'objet scanné
+  erreurGenre(testerType) {
+    let messageErreur = "Parfait!";//par défaut le message est sur *parfait
+    this.valide = true;//par défaut la propriete valide est vrai
+    const valeurFiltre = this.titre.value.trim();//on réalise de nouvelle constante en effacant les espaces superflue
+    const valeurNombre = parseInt(this.titre.value);//on réalise une nouvelle constante pour les chiffres, l'entrée sera convertie en en entier
+//recours au switch pour tester le type et retourner les erreurs adéquates
+    switch (testerType) {
+      case "string"://pour le type string
+        if (valeurFiltre === "") {
+          messageErreur = "Tous les champs sont obligatoires";
+          this.valide = false;
+        } else if (!this.verifierString()) {
+          messageErreur = "+ 2 caractères de A à Z acceptés";//recours a la methode presente dans la classe pour comparer les valeurs des textes au pattern regex
+          this.valide = false;
+        }
+        break;
+
+      case "email":// pour le type email, attention, ce sont des types indiqués manuellement dans la propriete de l'objet correspondante
+        if (!this.verifierEmail()) {
+          messageErreur = "l'email est incorrect";//la methode est appellé pour comparer le champ email, si retourne l'inverse de true, l'etat de l'objet est invalide
+          this.valide = false;
+        }
+        break;
+      case "date":
+        if (valeurFiltre === "") {
+          messageErreur = "Quel est votre date ";
+          this.valide = false;
+        }
+        break;
+
+      case "nombre":
+        if (valeurNombre === "" || valeurNombre < 0) {
+          messageErreur = "Vous devez indiquer combien ";
+          this.valide = false;
+        }
+        break;
+
+      case "radio"://si pas coché il retourne faux
+        if (this.titre.checked == false) {
+          messageErreur = "Vous devez indiquer votre choix";
+          this.valide = false;
+        }
+        break;
+
+      case "coche":
+        if (this.titre.checked == false) {
+          this.valide = false;
+        }
+        break;
+
+      default://par defaut, ce tout retourne faux on active le message d'erreur, et on invalide l'etat de l'objet
+        if (!valeurFiltre || !valeurNombre) {
+          messageErreur = "Tous les champs sont obligatoires";
+          this.valide = false;
+        }
+        break;
+    }
+    return messageErreur;//on retourne le message d'erreur final pour qu'il soit traité par la methode erreurEvenement présente plus haut
+  }
+
+  retourTypeChamps() {
+    //une methode finale qu'on devra activer avec l'appel du nouvel objet, celle-ci permet de mettre en argument dans erreurEvenement
+    //le retour de la methode erreurGenre qui contient lui meme dans son propre argument le type de l'objet meme.
+    this.erreurEvenement(this.erreurGenre(this.genre));
+    
+    
+    return this.valide;//retourne l'etat de l'objet lui-meme une fois traiter
+  }
+}
+
+//une classe pour recuperer et traiter les nouvelles entites des champs du formulaire en eux meme, non vérifié. 
+//Dans le but de rendre plus claire le code. Elle prend 4 proprietes, le titre du label en string, la valeur recuperée du dom, le genre, et son etat.
+
+class ObjetChamps {
+  constructor(titre, valeur, genre, valide) {
+    this.titre = titre;
+    this.valeur = valeur;
+    this.genre = genre;
+    this.valide = valide;
+  }
+}
+//la fonction valider sera appellée au clique et créera les nouveaux objets dépendantes des classes.
 function valider(event) {
+  event.preventDefault();//on previent le comportement par défaut
+
+  //une fonction uniquement pour les type radio est effectué pour éviter les invalidités "null" en cas d'absence de check
+  //tres important pour que la class valeurVerifiee puisse travailler
+  function cocheRadio(check, valeur) {//deux arguments, une qui appelle dans le dom la valeur qui est checked, et l'autre la valeur sans checked.
+    //il faut savoir que les gestions des actions sur les attributs data-error, ont besoin d'un queryselector valide. Ainsi tout est geré avant
+    //la verification des entites du formulaire, elle ne renverra que des valeurs exploitables
+    if (!document.querySelector(check)) {
+      return document.querySelector(valeur);
+    } else {
+      return document.querySelector(check);
+    }
+  }
+  //creation des constantes pour travailler avec les ids du dom
   const prenom = document.querySelector("#first"); //selection des id correspondant au champs
   const nom = document.querySelector("#last");
   const email = document.querySelector("#email");
   const naissance = document.querySelector("#birthdate");
   const nbrTournoi = document.querySelector("#quantity");
-  const location = document.getElementsByName("location");
-  const condition = document.getElementsByName("condition");
-  const enregistre = document.getElementsByName("enregistre");
+  const ville = cocheRadio(//appelle la fonction cocheRadio et met en argument les deux valeurs name, une checked et une non
+    "input[name='location']:checked",
+    "input[name='location']"
+  );
+  const condition = cocheRadio(//pareil
+    "input[name='condition']:checked",
+    "input[name='condition']"
+  );
+  const enregistre = cocheRadio(//pareil
+  "input[name='enregistre']:checked",
+  "input[name='enregistre']");//ne sera pas validé ni invalidé, donc un check sans recours a la fonction
+  //creation d'un tableau pour generer tous les nouveaux objets. elle prenne 4 proprietes, et sont par défaut : false, tant que non verifié
 
-  event.preventDefault(); // stoppe les fonctionnalités par défaut de l'evenement du click
-  verificationChamps(
-    prenom,
-    nom,
-    email,
-    naissance,
-    nbrTournoi,
-    location,
-    condition,
-    enregistre
-  ); //récuperer les variables en argument de la fonction *verificationChamps appellée
-}
+  let champsQuestionnaire = [
+    new ObjetChamps("prenom", prenom, "string", false),
+    new ObjetChamps("nom", nom, "string", false),
+    new ObjetChamps("email", email, "email", false),
+    new ObjetChamps("naissance", naissance, "date", false),
+    new ObjetChamps("nombre de Tournoi", nbrTournoi, "nombre", false),
+    new ObjetChamps("ville", ville, "radio", false),
+    new ObjetChamps("condition", condition, "radio", false),
+    new ObjetChamps("enregistré(e)", enregistre, "coche", true),
+  ];
 
-function verificationChamps(
-  prenom,
-  nom,
-  email,
-  naissance,
-  nbrTournoi,
-  location,
-  condition,
-  enregistre
-) {
-  let prenomValeur = prenom.value.trim(); //efface les espace avant et après la valeur
-  let nomValeur = nom.value.trim(); //les variables sont en let car elles sont mis à jour avec le *toString qui va suivre
-  let emailValeur = email.value.trim();
-  let naissanceValeur = naissance.value.trim();
-  const nbrTournoiValeur = parseInt(nbrTournoi.value); // pour bien s'assurer que la valeur ne retournera que des entiers
-  const locationPourAttribut = document.querySelector("#location1");
-  const conditionPourAttribut = document.querySelector("#checkbox1");
-  let cocherChamps = "";
-  let selectCondition = "";
-  let selectEnregistrer = "";
-
-  //une boucle pour parcourir tous les balises inputs dont le name est sur *location pour gerer les types radio et leur selection
-  for (let radio of location) {
-    if (radio.checked) {
-      cocherChamps = radio.value;
-    } // si l'élément est coché, la valeur de value devient celle de la nouvelle variable : *locationChamps
-  }
-
-  for (let cocherCondition of condition) {
-    if (cocherCondition.checked) {
-      selectCondition = cocherCondition.value;
-    } // si l'élément est coché, la valeur de value devient celle de la nouvelle variable : *selectCondition
-  }
-
-  for (let cocherEnregistrer of enregistre) {
-    if (cocherEnregistrer.checked) {
-      selectEnregistrer = cocherEnregistrer.value;
-    } // si l'élément est coché, la valeur de value devient celle de la nouvelle variable : *selectEnregistrer
-  }
-
-  nomValeur = nomValeur.toString(); //met à jour la variable en la transformant en *string
-  prenomValeur = prenomValeur.toString();
-  emailValeur = emailValeur.toString();
-
-  //utilisation de switch pour comparer les valeurs les conditions et déclencher les fonctionnalités
-  let pasValide = 0; //je déclare un compteur qui va s'incrémenter à chaque erreur, à l'exterieur du switch pour une large portée de la variable
-  let averti = false; // je declare une variable a valeur booleenne, elle sera modifier par le switch si l'utilisateur accepte d'etre averti
-
-  //filtrer le champ prenom
-  switch (true) {
-    case prenomValeur === "": //dans le cas ou le champ *prenom est vide
-      erreurEvenement(prenom, "Tous les champs sont obligatoires"); //on appelle la fonction *erreurEvenement avec en argument la variable de l'id du champ prenom
-      pasValide++; // on modifier le compteur pour l'incrémenter de 1 quand il y a une erreur
-      break; //on stoppe à la rencontre de chaque erreur
-    case !verifierChamps(prenomValeur): //on test en passant en argument la variable prenomValeur et si ca retourne vrai donc faux avec ! :
-      erreurEvenement(prenom, "+ 2 caractères de A à Z acceptés"); //on appelle la fonction d'erreur en passant en argument la variable de l'id du champ prenom et le message d'erreur
-      pasValide++;
-      break;
-    default:
-      succesEvenement(prenom);
-  }
-  //filtrer le champ nom
-  switch (true) {
-    case nomValeur === "":
-      erreurEvenement(nom, "Tous les champs sont obligatoires");
-      pasValide++;
-      break;
-    case !verifierChamps(nomValeur):
-      erreurEvenement(nom, "+ 2 caractères de A à Z acceptés");
-      pasValide++;
-      break;
-    default:
-      succesEvenement(nom);
-      break;
-  }
-  //filtrer le champ email
-  switch (true) {
-    case emailValeur === "":
-      erreurEvenement(email, "Tous les champs sont obligatoires");
-      pasValide++;
-      break;
-    case !verifierEmail(emailValeur):
-      erreurEvenement(email, "Votre email est écrit de façon incorrect");
-      pasValide++;
-      break;
-    default:
-      succesEvenement(email);
-      break;
-  }
-  //filtrer le champ date de naissance
-  switch (true) {
-    case naissanceValeur === "":
-      erreurEvenement(naissance, "Veuillez indiquer votre date de naissance");
-      pasValide++;
-      break;
-    default:
-      succesEvenement(naissance);
-      break;
-  }
-  //filtrer le champ nombre de tournoi effectué
-  switch (true) {
-    case nbrTournoiValeur < 0: //j'ai mis une condition bloquant les valeur déclarées en dessous de 0
-      erreurEvenement(
-        nbrTournoi,
-        "Veuillez indiquer le nombre de tournoi participé"
-      );
-      pasValide++;
-      break;
-    default:
-      succesEvenement(nbrTournoi);
-      break;
-  }
-  //filtrer le champ pour le choix de la ville du futur tournoi
-  switch (true) {
-    case cocherChamps == "":
-      erreurEvenement(
-        locationPourAttribut,
-        "Veuillez selectionner votre ville pour le tournoi"
-      );
-      pasValide++;
-      break;
-    default:
-      succesEvenement(locationPourAttribut);
-      break;
-  }
-  //erreur au *checkbox non coché des conditions
-  switch (true) {
-    case selectCondition == "":
-      erreurEvenement(
-        conditionPourAttribut,
-        "Veuillez confirmer votre accord des conditions d'utilisation"
-      );
-      pasValide++;
-      console.log("conditions refusées");
-      break;
-    default:
-      succesEvenement(conditionPourAttribut);
-      break;
-  }
-  // savoir si oui ou non l'utilisateur accepte d'être averti des nouveautés
-  switch (true) {
-    case selectEnregistrer == "":
-      if (averti == true) {
-        averti = false;
-      } //je réalise une condition if pour basculer de vrai à faux et vice et versa selon ce que l'utilisateur coche
-      break;
-    default:
-      if (averti == false) {
-        averti = true;
-      }
-      break;
-  }
-  //écriture des actions de la fonction pour gerer les erreurs
-  function erreurEvenement(inputErreur, message) {
-    const parentChamp = inputErreur.parentElement; // recuperer le parent de l'élément
-    //pour profiter des pseudo-elements ::after déjà présent dans le css :
-    parentChamp.setAttribute("data-error", message); //mettre l'attribut data-error sur la valeur de la variable message passé par l'argument de la fonction
-    parentChamp.removeAttribute("data-succes"); //effacer l'attribut *data-succes
-    parentChamp.setAttribute("data-error-visible", true); // pour mettre l'attribut *data-error-visible pour profiter du css qui met les bords en rouge
-  }
-  //écriture des actions de la fonction pour gerer l'absence d'erreur
-  function succesEvenement(inputSucces) {
-    const parentChamp = inputSucces.parentElement;
-    parentChamp.setAttribute("data-succes", "Parfait!"); // rajouter un attribut *data-succes
-    parentChamp.setAttribute("data-error-visible", false);
-  }
-
-  function verifierChamps(champ) {
-    return /^([a-zA-Z]{2,})+$/.test(champ); //vérification de l'alphabetavec les patterns Regex, de a-A jusqu'à z-Z pour le prénom et le nom, minimum 2 caractères
-  }
-
-  function verifierEmail(verifemail) {
-    return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}$/.test(verifemail); //verification du format de l'email avec les patterns Regex minimum 2 caractères, maximum 15 caracteres
-  }
-
-  //je déclare une fonction pour verifier si la personne accepte d'être avertie ou non
-  function avertiVraiOuFaux(averti) {
-    if (averti == false) {
-      return "refuse d'être averti";
-    } else {
-      return "accepte d'être averti";
+  let objetFaux = 0;//creation d'une variable pour compter le nombre d'etat faux qu'il y aura apres la vérification de mes objets
+  //mise en route de la boucle pour parcourir le tableau et créer des nouveaux objets dans un etat verifié
+  champsQuestionnaire.forEach((objetChampsIndex) => {
+    new valeurVerifiee(
+      objetChampsIndex.titre,
+      objetChampsIndex.valeur,
+      objetChampsIndex.genre,
+      objetChampsIndex.valide
+    ).retourTypeChamps();
+    //une condition pour verifier si mes objets vérifiés retourne vrai ou faux
+    if (
+      new valeurVerifiee(
+        objetChampsIndex.titre,
+        objetChampsIndex.valeur,
+        objetChampsIndex.genre,
+        objetChampsIndex.valide
+      ).retourTypeChamps() === false
+    ) {
+      objetFaux++;//on incremente tant qu'il y a des faux
+      console.log(objetFaux);
     }
-  }
-//si le compteur *pasValide est au-dessus de 1 ou egale, j'arrete tout et j'affiche dans le *console.log un message
-  if (pasValide >= 1) {
-    console.log("Pas valide : recommence ");
-  } 
-  //si *pasValide est inférieur à 1, on récupère toute les valeurs validées pour les afficher dans un *console.log. Ainsi, le code est ouvert a une continuité par notamment le stockage de ces données de façon permanente : base de données, .json ou autre
-  else {
-    console.log(
-      "ça marche ! " +
-        prenomValeur +
-        " - " +
-        nomValeur +
-        " - " +
-        emailValeur +
-        " - " +
-        naissanceValeur +
-        " - tournoi de participé : " +
-        nbrTournoiValeur +
-        " - " +
-        "ville selectionnée : " +
-        cocherChamps +
-        " - " +
-        "conditions acceptées" +
-        " - " +
-        avertiVraiOuFaux(averti)
-    );
+  });
+  //une fois tout ce parcours réalisé, nous pouvons verifié le nombre de faux, et ainsi en cas d'absence ou <1 nous pouvons lancer la suite des actions,
+  //en appelant la fonction pour confirmer le formulaire et passée à l'etat des remerciements
+  //un seul false indique simplement que la personne ne veut pas s'enregistrer à la news.
+  if (objetFaux <= 1) {
     confirmerFormulaire();
-  }
-}
+    let votrePrenom = prenom.value;
+    votreNom = nom.value;
+    votreMail = email.value;
+    votreDate = naissance.value;
+    votrenbrTournoi = nbrTournoi.value;
+    votreVilleTournoi = ville.value;
+    vosCondition = condition.value;
+    vosNews = enregistre.value;
 
-//appelle de la fonction *valider avec un écouteur d'évènement sur le bouton
-boutonValidation.addEventListener("click", valider);
+    console.log(`votre prénom est : ${votrePrenom} - votre nom est : ${votreNom} - votre email est : ${votreMail} - votre date de naissance est :
+    ${votreDate} - vous avez réalisé : ${votrenbrTournoi} tournoi(s) - la ville que vous avez choisi : ${votreVilleTournoi} - vous acceptez les 
+    conditions - vous voulez être au courant : ${(objetFaux===0?true:false)}`);
+}}
+
+boutonValidation.addEventListener("click", valider);//appeller la fonction valider au clique sur envoyer.
