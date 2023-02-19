@@ -249,6 +249,11 @@ input {
   text-align: left;
   line-height: 0.3;
 }
+.formData{ /*retouche*/
+  /* animation-name:fermetureChamp; */
+  animation-duration: var(--modal-duration);
+
+}
 
 @keyframes opaciteProgressive {
   from {
@@ -608,7 +613,16 @@ footer {
     text-align: center;
   }
 }
-
+@keyframes fermetureChamp{
+  from {
+    opacity: 1;
+    
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-150px);
+  }
+}
 @keyframes modalopen {
   from {
     opacity: 0;

@@ -5,19 +5,20 @@ function editNav() {
   } else {
     x.className = "topnav";
   }
-}
+}//pour le menu responsive déclenché au click
 
 // DOM Elements
-
-const modalContentTotal = document.querySelector(".content");
+const modalContentTotal = document.querySelector(".content");//recupere le contenu principal
 const modalbg = document.querySelector(".bground"); //recupere la base du formulaire
-const modalContent = document.querySelectorAll(".formData"); //recupere dans le dom les elements de la classe *formData
-const modalBtn = document.querySelectorAll(".modal-btn");
+const modalContent = document.querySelectorAll(".formData"); //recupere dans le dom les elements de la classe *formData, ce sont les parents des inputs
+const modalBtn = document.querySelectorAll(".modal-btn");//bouton d'inscription
 const boutonFermer = document.querySelector(".close"); //bouton fermer
-const btnSignup = document.querySelector(".btn-signup");
+// const btnSignup = document.querySelector(".btn-signup");
 const formConfirmation = document.querySelector(".formConfirmation"); // selectionner la page de confirmation de l'enregistrement
 const boutonValidation = document.getElementById("valider"); //bouton valider
-const boutonQuitter = document.getElementById("quitter");
+const boutonQuitter = document.getElementById("quitter");//bouton quitter qui apparait apres l'inscription confirmée
+
+
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", lancerFormulaire));
 
@@ -25,9 +26,9 @@ modalBtn.forEach((btn) => btn.addEventListener("click", lancerFormulaire));
 function lancerFormulaire() {
   modalbg.style.visibility = "visible";
   boutonValidation.style.visibility = "visible";
-  modalContent.forEach((form) => (form.style.visibility = "visible"));
-  modalContentTotal.style.animationName = "modalopen";
-  
+  //gestion des apparitions des blocks, la propriete visibility est utilisé a la place de display pour conserver leurs occupations initiales de l'espace
+  modalContent.forEach((form) => {form.style.visibility = "visible";form.style.animationName = null;});//gestion de l'animation @keyframe, initialiser le nom a nul de l'animation
+  modalContentTotal.style.animationName = "modalopen";//on profite de la keyframe du css et on l'active au lancement du formulaire en installant le nom de l'animation dans le style  
 }
 
 // fermer le formulaire
@@ -35,11 +36,12 @@ function fermerFormulaire() {
   modalbg.style.visibility = "hidden";
   formConfirmation.style.visibility = "hidden";
   boutonValidation.style.visibility = "hidden";
-  modalContentTotal.removeAttribute("style");
-  modalContent.forEach((form) => (form.style.visibility = "hidden")); //realise une boucle au sein de tous les elements de la classe selectionnée et les rends invisible
+  modalContentTotal.removeAttribute("style");//pour réinitialiser l'animation modalopen
+  modalContent.forEach((form) => {form.style.visibility = "hidden";form.style.animationName="fermetureChamp";}); //realise une boucle au sein de tous les elements de la 
+  //classe selectionnée et les rends invisible, rend actif l'animation des champs à la fermeture;
 }
-// déclencher la fermeture du formulaire
 
+// déclencher la fermeture du formulaire
 boutonFermer.addEventListener("click", fermerFormulaire);
 boutonQuitter.addEventListener("click", fermerFormulaire);
 
@@ -47,7 +49,7 @@ boutonQuitter.addEventListener("click", fermerFormulaire);
 function confirmerFormulaire() {
   formConfirmation.style.visibility = "visible";
   modalbg.style.visibility = "visible";
-  modalContent.forEach((form) => (form.style.visibility = "hidden"));
+  modalContent.forEach((form) => {form.style.visibility = "hidden";form.style.animationName="fermetureChamp";});//pour chaque parent d'un input, ajout d'une animation keyframe et activation au moment de la fermeture du formulaire
   boutonValidation.style.visibility = "hidden";
 }
 
@@ -71,7 +73,7 @@ class valeurVerifiee {
     this.titreString = titreStringChamps; //l'intitulé du champs pour lire les retours en string proprement
     this.titre = titreChamps; // les données issues querySelector, il va récuperer les id, name, ou .class du dom
     this.genre = genreChamps; //le type de l'objet a verifier : une valeur string ou nombre ne sera pas traité pareil
-    this.valide = valide; // pour un retour booleen de la validée de l'objet
+    this.valide = valide; // pour un retour booleen de la validation de l'objet
   }
   //on commence par les methodes de verification :
   //verification des entrees string
@@ -82,7 +84,7 @@ class valeurVerifiee {
   verifierEmail() {
     return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}$/.test(
       this.titre.value
-    ); //verification du format de l'email avec les patterns Regex minimum 2 caractères, maximum 15 caracteres
+    ); //verification du format de l'email avec les patterns Regex, apres le point, minimum 2 caractères, maximum 15 caracteres
   }
 
   //methode d'erreur avec en argument le message d'erreur recupéré du filtre par type de données
@@ -91,12 +93,12 @@ class valeurVerifiee {
     //pour profiter des pseudo-elements ::after déjà présent dans le css :
     //verification des messages d'erreur et action des evenements qui en découle
     if (message === "Parfait!") {
-      parentTitre.setAttribute("data-succes", message), //on profite de l'attribut déjà présent dans le css d'origine avec le pseudo-eement ::after
+      // parentTitre.setAttribute("data-succes", message), //on profite de l'attribut déjà présent dans le css d'origine avec le pseudo-eement ::after
         parentTitre.removeAttribute("data-error-visible"),
         parentTitre.removeAttribute("data-error"); //pour enlever l'attribut *data-error ainsi on change de couleur la police
         parentTitre.style.animationName = null;
     } else {
-      parentTitre.removeAttribute("data-succes"), //en cas de contradiction de la condition, on fait l'inverse
+      // parentTitre.removeAttribute("data-succes"), //en cas de contradiction de la condition, on fait l'inverse
         parentTitre.setAttribute("data-error", message), //on installe l'attribut data-error
         parentTitre.setAttribute("data-error-visible", true); // pour mettre l'attribut *data-error-visible pour profiter du css qui met les bords en rouge
         parentTitre.style.animationName = "opaciteProgressive";
@@ -209,7 +211,7 @@ function valider(event) {
   const nbrTournoi = document.querySelector("#quantity");
 
   const ville = cocheRadio(
-    //appelle la fonction cocheRadio et met en argument les deux valeurs name, une checked et une non
+    //dans le meme principe mais aussi appelle la fonction cocheRadio et met en argument les deux valeurs name, une checked et une non
     "input[name='location']:checked",
     "input[name='location']"
   );
@@ -222,7 +224,7 @@ function valider(event) {
     "input[name='enregistre']"
   );
 
-  //creation d'un tableau pour stocker tous les nouveaux objets. elle prenne 4 proprietes, et sont par défaut : false, tant que non verifié
+  //creation d'un tableau pour stocker tous les nouveaux objets. elle prenne 4 proprietes, et la derniere propriete :valide est par défaut : false, tant que non verifié
 
   let champsQuestionnaire = [
     new ObjetChamps("prenom", prenom, "string", false),
@@ -263,18 +265,17 @@ function valider(event) {
   if (objetFaux <= 1) {
     confirmerFormulaire();
     let votrePrenom = prenom.value;
-    votreNom = nom.value;
-    votreMail = email.value;
-    votreDate = naissance.value;
-    votreNbrTournoi = nbrTournoi.value;
-    votreVilleTournoi = ville.value;
-    vosConditions = condition.value;
-    vosNews = enregistre.value;
+    let votreNom = nom.value;
+    let votreMail = email.value;
+    let votreDate = naissance.value;
+    let votreNbrTournoi = nbrTournoi.value;
+    let votreVilleTournoi = ville.value;
+    // let vosConditions = condition.value; variable non utilisée mais exploitable pour la suite
+    // let vosNews = enregistre.value;
 
     console.log(`votre prénom est : ${votrePrenom} - votre nom est : ${votreNom} - votre email est : ${votreMail} - votre date de naissance est :
     ${votreDate} - vous avez réalisé : ${votreNbrTournoi} tournoi(s) - la ville que vous avez choisi : ${votreVilleTournoi} - vous acceptez les 
-    conditions - vous voulez être au courant : ${
-      objetFaux === 0 ? true : false
+    conditions - vous voulez être au courant : ${(objetFaux === 0 ? true : false)
     }`);
 
     document.querySelectorAll(".formData input").forEach((input) => {
