@@ -497,6 +497,9 @@ input[data-error]::after {
 .hero-content {
   min-width: 424px;/*retouche*/
 }
+.hero-img{/*retouche*/
+  margin-left:80px;
+}
 }
 @media screen and (max-width: 1000px) {/*retouche */
   .hero-section {
