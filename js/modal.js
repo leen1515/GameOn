@@ -138,7 +138,7 @@ class valeurVerifiee {
         break;
 
       case "nombre":
-        if (valeurNombre === "" || valeurNombre < 0) {
+        if (valeurNombre === "" || valeurNombre < 0 || valeurNombre >99) {
           messageErreur = "Vous devez indiquer combien ";
           this.valide = false;
         }
