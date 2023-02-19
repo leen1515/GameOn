@@ -18,6 +18,7 @@ body {
   font-size: 18px;
   max-width: 1300px;
   margin: 0 auto;
+  min-width:350px; /*retouche*/
 }
 
 p {
@@ -34,10 +35,10 @@ img {
   margin: 3.5%;
 }
 .header-logo {
-    float: left;
+  float: left;
 }
 .main-navbar {
-    float: right;
+  float: right;
 }
 .topnav a {
   float: left;
@@ -51,13 +52,16 @@ img {
   font-family: Roboto, sans-serif;
 }
 
-.topnav a:hover {
+/*retouche*/
+.topnav .navbar__lien:hover {
   background-color: #ff0000;
   color: #ffffff;
   border-radius: 15px;
+  text-decoration: underline;
 }
 
-.topnav a.active {
+/*retouche*/
+.topnav .navbar__lien.active {
   background-color: #ff0000;
   color: #ffffff;
   border-radius: 15px;
@@ -65,43 +69,54 @@ img {
 
 .topnav .icon {
   display: none;
+  background-color: #ffffff; /*retouche*/
 }
 
+.nav-couleur {
+  color: #ff0000; /*retouche */
+}
 @media screen and (max-width: 768px) {
-  .topnav a {display: none;}
+  .topnav a {
+    display: none;
+  }
   .topnav a.icon {
     float: right;
     display: block;
   }
-}
 
-@media screen and (max-width: 768px) {
-  .topnav.responsive {position: relative;}
+  .topnav.responsive {
+    position: relative;
+  }
   .topnav.responsive .icon {
-    position: absolute;
+    position: relative; /*retouche*/
     right: 0;
     top: 0;
   }
+
   .topnav.responsive a {
     float: none;
     display: block;
-    text-align: left;
+    text-align: right; /*retouche*/
   }
 }
 
-
-
- @media screen and (max-width: 540px) {
-  .topnav a {display: none;}
+@media screen and (max-width: 540px) {
+  .topnav a {
+    display: none;
+  }
+  .topnav.responsive .icon {
+    position: absolute; /*retouche*/
+  }
+  
   .topnav a.icon {
     float: right;
     display: block;
-    margin-top: -15px;
+    margin-top: 15px;
   }
-} 
+}
 
 main {
-  font-size: 130%;
+  font-size: 140%;
   font-weight: bolder;
   color: black;
   padding-top: 0.5vw;
@@ -110,8 +125,6 @@ main {
   margin: 1px 20px 15px;
   border-radius: 2rem;
   text-align: justify;
-
-
 }
 
 .modal-btn {
@@ -146,6 +159,7 @@ main {
   border-radius: 15px;
   cursor: pointer;
   font-size: 16px;
+  text-align: center;/*retouche*/
 }
 
 .button:hover {
@@ -157,7 +171,7 @@ main {
 }
 
 .bground {
-  visibility:hidden;
+  visibility: hidden;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -171,16 +185,17 @@ main {
 .content {
   margin: 5% auto;
   width: 100%;
-  max-width: 500px;
-  animation-name: modalopen;
-  animation-duration: var(--modal-duration);
+  max-width: 430px;/*retouche*/
   background: #232323;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
   color: #fff;
   padding-top: 10px;
+  animation-duration: var(--modal-duration);
+  
 }
+ 
 
 .modal-body {
   padding: 15px 8%;
@@ -189,7 +204,7 @@ main {
 
 label {
   font-family: var(--font-default);
-  font-size: 17px;
+  font-size: 12px;
   font-weight: normal;
   display: inline-block;
   margin-bottom: 11px;
@@ -204,11 +219,12 @@ input {
   padding: 8px;
   width: 100%;
   border-radius: 8px;
-  font-size: 20px;
-  height: 48px;
+  font-size: 15px;
+  height: 35px;
 }
 .formData[data-error]::after {
   content: attr(data-error);
+  font-family: 'Roboto', sans-serif;
   font-size: 0.5em;
   color: #e54858;
   display: block;
@@ -217,10 +233,10 @@ input {
   margin-bottom: 7px;
   text-align: left;
   line-height: 0.5;
-  opacity: 0;
-  animation-name: opaciteProgressive;
-  animation-duration: 0.3s;
-  animation-fill-mode: forwards;
+  /* animation-name: opaciteProgressive; l'animation est executée avec javascript, à l'apparition de l'erreur
+  animation-duration: 0.5s;
+  animation-delay: 0.5;
+  animation-duration: var(--modal-duration);*/
 }
 .formData[data-succes]::after {
   content: attr(data-succes);
@@ -232,15 +248,16 @@ input {
   margin-bottom: 7px;
   text-align: left;
   line-height: 0.3;
-  opacity: 0;
-  animation-name: opaciteProgressive;
-  animation-duration: 0.3s;
-  animation-fill-mode: forwards;
 }
+
 @keyframes opaciteProgressive {
-  to{
-    opacity: 1;}
-}
+  from {
+    opacity:0;
+  }
+  to {
+    opacity: 1;
+  }
+} 
 
 .formData[data-error-visible="true"]::after {
   opacity: 1;
@@ -248,30 +265,44 @@ input {
 .formData[data-error-visible="true"] .text-control {
   border: 2px solid #e54858;
 }
-.formData{
-  visibility:hidden;
+.formData {
+  visibility: hidden;
 }
 /*ajout d'une classe pour position le panneau remerciement*/
-.formConfirmation{
-  position:absolute;
+.formConfirmation {
+  position: absolute;
   visibility: hidden;
-  top:100px;
-  left:0;
-  width:100%;
-  height:100%;
+  top: 100px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-#valider{
-visibility: hidden;
+.texte-merci{
+  position: relative;
+  height:50%;
+  flex:0.5;
+  width:50%;
+  text-align: center;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 40px;
+}
 
+#valider {
+  visibility: hidden;
 }
 
 input[data-error]::after {
-    width:100%;
-    height:auto;
-    font-size: 0.6em;
-    color: red;
-} 
+  width: 100%;
+  height: auto;
+  font-size: 0.6em;
+  color: red;
+}
 
 .checkbox-label,
 .checkbox2-label {
@@ -364,12 +395,13 @@ input[data-error]::after {
 }
 .btn-submit,
 .btn-signup {
+  width:200px;/*retouche*/
   background: #fe142f;
   display: block;
   margin: 0 auto;
   border-radius: 7px;
   font-size: 1rem;
-  padding: 12px 82px;
+  padding: 12px 0px;/*retouche*/
   color: #fff;
   cursor: pointer;
   border: 0;
@@ -443,10 +475,11 @@ input[data-error]::after {
 /* custom select end */
 .text-label {
   font-weight: normal;
-  font-size: 16px;
+  font-size: 12px;
 }
+@media screen and (min-width: 1000px) {/*retouche */
 .hero-section {
-  min-height: 93vh;
+  max-height: 600px; /*retouche */
   border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -454,6 +487,23 @@ input[data-error]::after {
   box-shadow: 0 2px 7px 2px rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
 }
+}
+@media screen and (min-width: 800px) {/*retouche */
+.hero-content {
+  min-width: 424px;/*retouche*/
+}
+}
+@media screen and (max-width: 1000px) {/*retouche */
+  .hero-section {
+    max-height: auto; /*retouche */
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    overflow: hidden;
+    box-shadow: 0 2px 7px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+  }
+  }
 .hero-content {
   padding: 51px 67px;
   grid-column: span 4;
@@ -461,7 +511,7 @@ input[data-error]::after {
   color: #fff;
   position: relative;
   text-align: left;
-  min-width: 424px;
+  min-width: 224px;/*retouche*/
 }
 .hero-content::after {
   content: "";
@@ -477,7 +527,7 @@ input[data-error]::after {
   z-index: 1;
 }
 .hero-headline {
-  font-size: 6rem;
+  font-size: 5rem;
   font-weight: normal;
   white-space: nowrap;
 }
@@ -501,7 +551,7 @@ input[data-error]::after {
 .hero-img img {
   width: 100%;
   height: 100%;
-  display: block;
+  object-fit: cover; /*retouche*/
   padding: 0;
 }
 .copyrights {
@@ -525,6 +575,7 @@ footer {
     box-shadow: unset;
   }
   .hero-content {
+    width: 100%;/*retouche*/
     background: #fff;
     color: #000;
     padding: 20px;
@@ -536,7 +587,7 @@ footer {
     display: none;
   }
   .hero-headline {
-    font-size: 4.5rem;
+    font-size: 3.0rem;
     white-space: normal;
   }
   .hero-text {
@@ -567,4 +618,3 @@ footer {
     opacity: 1;
   }
 }
-
