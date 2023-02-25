@@ -69,19 +69,33 @@ img {
 
 .topnav .icon {
   display: none;
-  background-color: #ffffff; /*retouche*/
+  background-color: #ffffff00; /*retouche*/
 }
 
 .nav-couleur {
   color: #ff0000; /*retouche */
 }
 @media screen and (max-width: 768px) {
+  .main-navbar{
+
+  }
+  
+  .header-logo {
+    position: absolute;
+    margin-left: 30px;
+    width: 150px;
+  }
   .topnav a {
     display: none;
   }
   .topnav a.icon {
     float: right;
     display: block;
+    right: 0;
+    top: 0;
+    width: auto;
+    padding: 0;
+    margin-right: 20px;
   }
 
   .topnav.responsive {
@@ -91,6 +105,9 @@ img {
     position: relative; /*retouche*/
     right: 0;
     top: 0;
+    width: auto;
+    padding: 0;
+    margin-right: 20px;
   }
 
   .topnav.responsive a {
@@ -105,14 +122,14 @@ img {
     display: none;
   }
   .topnav.responsive .icon {
-    position: absolute; /*retouche*/
+    position: relative; /*retouche*/
+    right: 0;
+    top: 0;
+    width: auto;
+    padding: 0;
+    margin-right: 20px;
   }
-  
-  .topnav a.icon {
-    float: right;
-    display: block;
-    margin-top: 15px;
-  }
+
 }
 
 main {
@@ -183,7 +200,7 @@ main {
 }
 
 .content {
-  margin: 5% auto;
+  margin: 60px auto;
   width: 100%;
   max-width: 430px;/*retouche*/
   background: #232323;
@@ -493,7 +510,7 @@ input[data-error]::after {
   margin-bottom: 10px;
 }
 }
-@media screen and (min-width: 800px) {/*retouche */
+@media screen and (min-width: 769px) {/*retouche */
 .hero-content {
   min-width: 424px;/*retouche*/
 }
@@ -536,12 +553,12 @@ input[data-error]::after {
 }
 .hero-headline {
   font-size: 5rem;
-  font-weight: normal;
+  font-weight: 500;
   white-space: nowrap;
 }
 .hero-text {
   width: 146%;
-  font-weight: normal;
+  font-weight: 400;
   margin-top: 57px;
   padding: 0;
 }
@@ -577,7 +594,7 @@ footer {
   padding-right: 2vw;
   margin: 0 20px;
 }
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 769px) {
   .hero-section {
     display: block;
     box-shadow: unset;
@@ -595,16 +612,18 @@ footer {
     display: none;
   }
   .hero-headline {
-    font-size: 3.0rem;
+    font-size: 2.0rem;
     white-space: normal;
   }
   .hero-text {
+    margin-top: 10px;
     width: unset;
-    font-size: 1.5rem;
+    font-size: 1.0rem;
   }
   .hero-img img {
     border-radius: 10px;
-    margin-top: 40px;
+    margin-top: 0px;
+    padding: 20px;
   }
   .hero-section > .btn-signup {
     display: block;

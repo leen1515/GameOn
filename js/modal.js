@@ -27,7 +27,7 @@ function lancerFormulaire() {
   modalbg.style.visibility = "visible";
   boutonValidation.style.visibility = "visible";
   //gestion des apparitions des blocks, la propriete visibility est utilisé a la place de display pour conserver leurs occupations initiales de l'espace
-  modalContent.forEach((form) => {form.style.visibility = "visible";form.style.animationName = null;});//gestion de l'animation @keyframe, initialiser le nom a nul de l'animation
+  modalContent.forEach((form) => {form.style.visibility = "visible";form.style.animationName = null;});//gestion de l'animation @keyframe, initialiser le nom a nul de l'animation, sinon a cause de la propriete *visibility a la place de *display il n'est jamais déclenché
   modalContentTotal.style.animationName = "modalopen";//on profite de la keyframe du css et on l'active au lancement du formulaire en installant le nom de l'animation dans le style  
 }
 
@@ -86,7 +86,9 @@ class valeurVerifiee {
       this.titre.value
     ); //verification du format de l'email avec les patterns Regex, apres le point, minimum 2 caractères, maximum 15 caracteres
   }
-
+  verifierNombre(){
+    return /[0-9]/g.test(this.titre.value);
+  }
   //methode d'erreur avec en argument le message d'erreur recupéré du filtre par type de données
   erreurEvenement(message) {
     const parentTitre = this.titre.parentElement; // recuperer le parent de l'élément
@@ -138,8 +140,8 @@ class valeurVerifiee {
         break;
 
       case "nombre":
-        if (valeurNombre === "" || valeurNombre < 0 || valeurNombre >99) {
-          messageErreur = "Vous devez indiquer combien ";
+        if (!this.verifierNombre()|| valeurNombre ==="" || valeurNombre < 0 || valeurNombre >99) {
+          messageErreur = "Vous devez indiquer une valeur en-dessous de 99";
           this.valide = false;
         }
         break;
@@ -171,8 +173,8 @@ class valeurVerifiee {
     //une methode finale qu'on devra activer avec l'appel du nouvel objet, celle-ci permet de mettre en argument dans erreurEvenement
     //le retour de la methode erreurGenre qui contient lui meme dans son propre argument le type de l'objet meme.
     this.erreurEvenement(this.erreurGenre(this.genre));
-
-    return this.valide; //retourne l'etat de l'objet lui-meme une fois traité
+    let resultat = [this.valide, this.erreurGenre(this.genre)];
+    return resultat ; //retourne l'etat de l'objet lui-meme une fois traité
   }
 }
 
@@ -234,11 +236,13 @@ function valider(event) {
     new ObjetChamps("nombre de Tournoi", nbrTournoi, "nombre", false),
     new ObjetChamps("ville", ville, "radio", false),
     new ObjetChamps("condition", condition, "radio", false),
-    new ObjetChamps("enregistré(e)", enregistre, "coche", false),
+    new ObjetChamps("enregistré(e)", enregistre, "coche", true),
   ];
 
   let objetFaux = 0; //creation d'une variable pour compter le nombre d'etat faux qu'il y aura apres la vérification de mes objets
   //mise en route de la boucle pour parcourir le tableau et créer des nouveaux objets dans un etat verifié
+  let enregistrement=true;
+
   champsQuestionnaire.forEach((objetChampsIndex) => {
     new valeurVerifiee(
       objetChampsIndex.titre,
@@ -253,16 +257,41 @@ function valider(event) {
         objetChampsIndex.valeur,
         objetChampsIndex.genre,
         objetChampsIndex.valide
-      ).retourTypeChamps() === false
+      ).retourTypeChamps()[0] === false && 
+      new valeurVerifiee(
+        objetChampsIndex.titre,
+        objetChampsIndex.valeur,
+        objetChampsIndex.genre,
+        objetChampsIndex.valide
+      ).retourTypeChamps()[1]!== "Parfait!"
     ) {
       objetFaux++; //on incremente tant qu'il y a des faux
       console.log(objetFaux);
     }
-  });
+    else if(
+      new valeurVerifiee(
+        objetChampsIndex.titre,
+        objetChampsIndex.valeur,
+        objetChampsIndex.genre,
+        objetChampsIndex.valide
+      ).retourTypeChamps()[0] === false && 
+      new valeurVerifiee(
+        objetChampsIndex.titre,
+        objetChampsIndex.valeur,
+        objetChampsIndex.genre,
+        objetChampsIndex.valide
+      ).retourTypeChamps()[1]=== "Parfait!"){
+        enregistrement = false;
+      }
+    
+  })
+    ;
+  
+
   //une fois tout ce parcours réalisé, nous pouvons verifier le nombre de faux, et ainsi en cas d'absence ou <1 nous pouvons lancer la suite des actions,
   //en appelant la fonction pour confirmer le formulaire et passer à l'etat des remerciements
   //un seul false indique simplement que la personne ne veut pas s'enregistrer à la news.
-  if (objetFaux <= 1) {
+  if (objetFaux === 0) {
     confirmerFormulaire();
     let votrePrenom = prenom.value;
     let votreNom = nom.value;
@@ -271,11 +300,10 @@ function valider(event) {
     let votreNbrTournoi = nbrTournoi.value;
     let votreVilleTournoi = ville.value;
     // let vosConditions = condition.value; variable non utilisée mais exploitable pour la suite
-    // let vosNews = enregistre.value;
 
     console.log(`votre prénom est : ${votrePrenom} - votre nom est : ${votreNom} - votre email est : ${votreMail} - votre date de naissance est :
     ${votreDate} - vous avez réalisé : ${votreNbrTournoi} tournoi(s) - la ville que vous avez choisi : ${votreVilleTournoi} - vous acceptez les 
-    conditions - vous voulez être au courant : ${(objetFaux === 0 ? true : false)
+    conditions - vous voulez être au courant : ${(enregistrement)
     }`);
 
     document.querySelectorAll(".formData input").forEach((input) => {
