@@ -210,6 +210,7 @@ main {
   position: relative;
   color: #fff;
   padding-top: 10px;
+  overflow: hidden;
   animation-duration: var(--modal-duration);
   
 }
