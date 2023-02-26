@@ -252,10 +252,8 @@ input {
   margin-bottom: 7px;
   text-align: left;
   line-height: 0.5;
-  /* animation-name: opaciteProgressive; l'animation est executée avec javascript, à l'apparition de l'erreur
+  /* animation-name: opaciteProgressive; l'animation est executée avec javascript, à l'apparition de l'erreur*/
   animation-duration: 0.5s;
-  animation-delay: 0.5;
-  animation-duration: var(--modal-duration);*/
 }
 .formData[data-succes]::after {
   content: attr(data-succes);

@@ -104,7 +104,6 @@ class valeurVerifiee {
         parentTitre.setAttribute("data-error", message), //on installe l'attribut data-error
         parentTitre.setAttribute("data-error-visible", true); // pour mettre l'attribut *data-error-visible pour profiter du css qui met les bords en rouge
         parentTitre.style.animationName = "opaciteProgressive";
-        parentTitre.style.animationDuration="0.5s";
       }
   }
 
@@ -147,14 +146,14 @@ class valeurVerifiee {
         break;
 
       case "radio": //si pas coché il retourne faux
-        if (this.titre.checked == false) {
+        if (this.titre.checked === false) {
           messageErreur = "Vous devez indiquer votre choix";
           this.valide = false;
         }
         break;
 
       case "coche":
-        if (this.titre.checked == false) {
+        if (this.titre.checked === false) {
           this.valide = false;
         }
         break;
@@ -286,16 +285,18 @@ function valider(event) {
     
   })
     ;
-  
+
+  function MajusculePremiere(lettre){return (lettre+'').charAt(0).toUpperCase()+lettre.substr(1);}//mettre le premier caractère en majuscule d'une valeur string
 
   //une fois tout ce parcours réalisé, nous pouvons verifier le nombre de faux, et ainsi en cas d'absence ou <1 nous pouvons lancer la suite des actions,
   //en appelant la fonction pour confirmer le formulaire et passer à l'etat des remerciements
   //un seul false indique simplement que la personne ne veut pas s'enregistrer à la news.
+
   if (objetFaux === 0) {
     confirmerFormulaire();
-    let votrePrenom = prenom.value;
-    let votreNom = nom.value;
-    let votreMail = email.value;
+    let votrePrenom = MajusculePremiere(prenom.value.toLowerCase());
+    let votreNom = MajusculePremiere(nom.value.toLowerCase());
+    let votreMail = email.value.toLowerCase();
     let votreDate = naissance.value;
     let votreNbrTournoi = nbrTournoi.value;
     let votreVilleTournoi = ville.value;
@@ -306,10 +307,7 @@ function valider(event) {
     conditions - vous voulez être au courant : ${(enregistrement)
     }`);
 
-    document.querySelectorAll(".formData input").forEach((input) => {
-      input.value = "";
-      input.parentElement.removeAttribute("data-succes");
-    }); //vider les champs apres la confirmation, réinitialiser le message d'evenement d'erreur
+    document.querySelector("form[name='reserve']").reset();//vider les champs apres la confirmation
   }
 }
 
