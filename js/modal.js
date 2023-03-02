@@ -1,5 +1,5 @@
 function editNav() {
-  var x = document.getElementById("myTopnav");
+  let x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
     x.className += " responsive";
   } else {
@@ -78,16 +78,16 @@ class valeurVerifiee {
   //on commence par les methodes de verification :
   //verification des entrees string
   verifierString() {
-    return /^([a-zA-Z]{2,})+$/.test(this.titre.value); //vérification de l'alphabet avec les patterns Regex, de a-A jusqu'à z-Z pour le prénom et le nom, minimum 2 caractères
+    return /^([a-zA-Z]{2,})+$/g.test(this.titre.value); //vérification de l'alphabet avec les patterns Regex, de a-A jusqu'à z-Z pour le prénom et le nom, minimum 2 caractères
   }
   //verification des entrees emails
   verifierEmail() {
-    return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+.[a-zA-Z.]{2,15}$/.test(
+    return /^[a-zA-Z0-9._-]+\@[a-zA-Z0-9._-]+\.[a-zA-Z.]{2,15}$/g.test(
       this.titre.value
     ); //verification du format de l'email avec les patterns Regex, apres le point, minimum 2 caractères, maximum 15 caracteres
   }
   verifierNombre(){
-    return /[0-9]/g.test(this.titre.value);
+    return /^[0-9]$/g.test(this.titre.value);
   }
   //methode d'erreur avec en argument le message d'erreur recupéré du filtre par type de données
   erreurEvenement(message) {
@@ -95,8 +95,8 @@ class valeurVerifiee {
     //pour profiter des pseudo-elements ::after déjà présent dans le css :
     //verification des messages d'erreur et action des evenements qui en découle
     if (message === "Parfait!") {
-      // parentTitre.setAttribute("data-succes", message), //on profite de l'attribut déjà présent dans le css d'origine avec le pseudo-eement ::after
-        parentTitre.removeAttribute("data-error-visible"),
+      // parentTitre.setAttribute("data-succes", message),
+        parentTitre.removeAttribute("data-error-visible"), //on profite de l'attribut déjà présent dans le css d'origine avec le pseudo-eement ::after
         parentTitre.removeAttribute("data-error"); //pour enlever l'attribut *data-error ainsi on change de couleur la police
         parentTitre.style.animationName = null;
     } else {
@@ -145,7 +145,7 @@ class valeurVerifiee {
         }
         break;
 
-      case "radio": //si pas coché il retourne faux
+      case "radio": //si ce n'est pas coché il retourne faux
         if (this.titre.checked === false) {
           messageErreur = "Vous devez indiquer votre choix";
           this.valide = false;
@@ -212,7 +212,7 @@ function valider(event) {
   const nbrTournoi = document.querySelector("#quantity");
 
   const ville = cocheRadio(
-    //dans le meme principe mais aussi appelle la fonction cocheRadio et met en argument les deux valeurs name, une checked et une non
+    //dans le meme principe mais aussi appelle en plus la fonction cocheRadio et met en argument les deux valeurs name, une checked et une non
     "input[name='location']:checked",
     "input[name='location']"
   );
@@ -226,7 +226,7 @@ function valider(event) {
   );
 
   //creation d'un tableau pour stocker tous les nouveaux objets. elle prenne 4 proprietes, et la derniere propriete :valide est par défaut : false, tant que non verifié
-
+  //sauf pour enregistre
   let champsQuestionnaire = [
     new ObjetChamps("prenom", prenom, "string", false),
     new ObjetChamps("nom", nom, "string", false),
@@ -286,7 +286,7 @@ function valider(event) {
   })
     ;
 
-  function MajusculePremiere(lettre){return (lettre+'').charAt(0).toUpperCase()+lettre.substr(1);}//mettre le premier caractère en majuscule d'une valeur string
+  function MajusculePremiere(lettre){return (lettre+'').charAt(0).toUpperCase()+lettre.substr(1);}//fonction pour mettre le premier caractère en majuscule d'une valeur string
 
   //une fois tout ce parcours réalisé, nous pouvons verifier le nombre de faux, et ainsi en cas d'absence ou <1 nous pouvons lancer la suite des actions,
   //en appelant la fonction pour confirmer le formulaire et passer à l'etat des remerciements
