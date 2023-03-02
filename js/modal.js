@@ -5,19 +5,18 @@ function editNav() {
   } else {
     x.className = "topnav";
   }
-}//pour le menu responsive déclenché au click
+} //pour le menu responsive déclenché au click
 
 // DOM Elements
-const modalContentTotal = document.querySelector(".content");//recupere le contenu principal
+const modalContentTotal = document.querySelector(".content"); //recupere le contenu principal
 const modalbg = document.querySelector(".bground"); //recupere la base du formulaire
 const modalContent = document.querySelectorAll(".formData"); //recupere dans le dom les elements de la classe *formData, ce sont les parents des inputs
-const modalBtn = document.querySelectorAll(".modal-btn");//bouton d'inscription
+const modalBtn = document.querySelectorAll(".modal-btn"); //bouton d'inscription
 const boutonFermer = document.querySelector(".close"); //bouton fermer
 // const btnSignup = document.querySelector(".btn-signup");
 const formConfirmation = document.querySelector(".formConfirmation"); // selectionner la page de confirmation de l'enregistrement
 const boutonValidation = document.getElementById("valider"); //bouton valider
-const boutonQuitter = document.getElementById("quitter");//bouton quitter qui apparait apres l'inscription confirmée
-
+const boutonQuitter = document.getElementById("quitter"); //bouton quitter qui apparait apres l'inscription confirmée
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", lancerFormulaire));
@@ -27,8 +26,11 @@ function lancerFormulaire() {
   modalbg.style.visibility = "visible";
   boutonValidation.style.visibility = "visible";
   //gestion des apparitions des blocks, la propriete visibility est utilisé a la place de display pour conserver leurs occupations initiales de l'espace
-  modalContent.forEach((form) => {form.style.visibility = "visible";form.style.animationName = null;});//gestion de l'animation @keyframe, initialiser le nom a nul de l'animation, sinon a cause de la propriete *visibility a la place de *display il n'est jamais déclenché
-  modalContentTotal.style.animationName = "modalopen";//on profite de la keyframe du css et on l'active au lancement du formulaire en installant le nom de l'animation dans le style  
+  modalContent.forEach((form) => {
+    form.style.visibility = "visible";
+    form.style.animationName = null;
+  }); //gestion de l'animation @keyframe, initialiser le nom a nul de l'animation, sinon a cause de la propriete *visibility a la place de *display il n'est jamais déclenché
+  modalContentTotal.style.animationName = "modalopen"; //on profite de la keyframe du css et on l'active au lancement du formulaire en installant le nom de l'animation dans le style
 }
 
 // fermer le formulaire
@@ -36,8 +38,11 @@ function fermerFormulaire() {
   modalbg.style.visibility = "hidden";
   formConfirmation.style.visibility = "hidden";
   boutonValidation.style.visibility = "hidden";
-  modalContentTotal.removeAttribute("style");//pour réinitialiser l'animation modalopen
-  modalContent.forEach((form) => {form.style.visibility = "hidden";form.style.animationName="fermetureChamp";}); //realise une boucle au sein de tous les elements de la 
+  modalContentTotal.removeAttribute("style"); //pour réinitialiser l'animation modalopen
+  modalContent.forEach((form) => {
+    form.style.visibility = "hidden";
+    form.style.animationName = "fermetureChamp";
+  }); //realise une boucle au sein de tous les elements de la
   //classe selectionnée et les rends invisible, rend actif l'animation des champs à la fermeture;
 }
 
@@ -49,7 +54,10 @@ boutonQuitter.addEventListener("click", fermerFormulaire);
 function confirmerFormulaire() {
   formConfirmation.style.visibility = "visible";
   modalbg.style.visibility = "visible";
-  modalContent.forEach((form) => {form.style.visibility = "hidden";form.style.animationName="fermetureChamp";});//pour chaque parent d'un input, ajout d'une animation keyframe et activation au moment de la fermeture du formulaire
+  modalContent.forEach((form) => {
+    form.style.visibility = "hidden";
+    form.style.animationName = "fermetureChamp";
+  }); //pour chaque parent d'un input, ajout d'une animation keyframe et activation au moment de la fermeture du formulaire
   boutonValidation.style.visibility = "hidden";
 }
 
@@ -60,12 +68,13 @@ const moisActuel = date.getMonth() + 1; //ajout du +1 pour un rendu exact du moi
 const jourActuel = date.getDate(); //renvoit le jour du mois.
 //vérification de la date de naissance avec la date actuelle. Avec l'ajout de l'attribut. La personne ne dois pas être née dans le futur.
 //ajout du 0 avant le chiffre et le slice(-2) pour limiter le rendu à deux chiffres pour que l'attribut max prenne en compte le format.
-document.forms.reserve.birthdate.max =
+const dateEntiereFormat =
   anneeActuelle +
   "-" +
   ("0" + moisActuel).slice(-2) +
   "-" +
   ("0" + jourActuel).slice(-2);
+document.forms.reserve.birthdate.max = dateEntiereFormat;
 
 //création d'une classe pour validé les objets verifier, le constructor construit les proprietes que le nouvel objet alimentera et les lies à lui meme
 class valeurVerifiee {
@@ -86,8 +95,17 @@ class valeurVerifiee {
       this.titre.value
     ); //verification du format de l'email avec les patterns Regex, apres le point, minimum 2 caractères, maximum 15 caracteres
   }
-  verifierNombre(){
+  verifierNombre() {
     return /^[0-9]$/g.test(this.titre.value);
+  }
+
+  //verification de la date de naissance
+  verifierDateNaissance() {
+    if (this.titre.value.trim() > dateEntiereFormat) {
+      return false;
+    } else {
+      return true;
+    }
   }
   //methode d'erreur avec en argument le message d'erreur recupéré du filtre par type de données
   erreurEvenement(message) {
@@ -96,15 +114,15 @@ class valeurVerifiee {
     //verification des messages d'erreur et action des evenements qui en découle
     if (message === "Parfait!") {
       // parentTitre.setAttribute("data-succes", message),
-        parentTitre.removeAttribute("data-error-visible"), //on profite de l'attribut déjà présent dans le css d'origine avec le pseudo-eement ::after
+      parentTitre.removeAttribute("data-error-visible"), //on profite de l'attribut déjà présent dans le css d'origine avec le pseudo-eement ::after
         parentTitre.removeAttribute("data-error"); //pour enlever l'attribut *data-error ainsi on change de couleur la police
-        parentTitre.style.animationName = null;
+      parentTitre.style.animationName = null;
     } else {
       // parentTitre.removeAttribute("data-succes"), //en cas de contradiction de la condition, on fait l'inverse
-        parentTitre.setAttribute("data-error", message), //on installe l'attribut data-error
+      parentTitre.setAttribute("data-error", message), //on installe l'attribut data-error
         parentTitre.setAttribute("data-error-visible", true); // pour mettre l'attribut *data-error-visible pour profiter du css qui met les bords en rouge
-        parentTitre.style.animationName = "opaciteProgressive";
-      }
+      parentTitre.style.animationName = "opaciteProgressive";
+    }
   }
 
   //la méthode erreurGenre va retourner un message et un etat valide booleen selon le type de l'objet scanné
@@ -114,6 +132,7 @@ class valeurVerifiee {
     const valeurFiltre = this.titre.value.trim(); //on réalise de nouvelle constante en effacant les espaces superflue
     const valeurNombre = parseInt(this.titre.value); //on réalise une nouvelle constante pour les chiffres, l'entrée sera convertie en en entier
     //recours au switch pour tester le type et retourner les erreurs adéquates
+
     switch (testerType) {
       case "string": //pour le type string
         if (valeurFiltre === "") {
@@ -131,15 +150,21 @@ class valeurVerifiee {
           this.valide = false;
         }
         break;
-      case "date":
-        if (valeurFiltre === "") {
-          messageErreur = "Quel est votre date ";
+
+      case "date": //compare le type date en appelant la fonction qui s'occupe de la comparer avec celle du jour même de l'enregistrement
+        if (!this.verifierDateNaissance() || this.titre.value === "") {
+          messageErreur = "Votre date de naissance est invalide";
           this.valide = false;
         }
         break;
 
       case "nombre":
-        if (!this.verifierNombre()|| valeurNombre ==="" || valeurNombre < 0 || valeurNombre >99) {
+        if (
+          !this.verifierNombre() ||
+          valeurNombre === "" ||
+          valeurNombre < 0 ||
+          valeurNombre > 99
+        ) {
           messageErreur = "Vous devez indiquer une valeur en-dessous de 99";
           this.valide = false;
         }
@@ -173,7 +198,7 @@ class valeurVerifiee {
     //le retour de la methode erreurGenre qui contient lui meme dans son propre argument le type de l'objet meme.
     this.erreurEvenement(this.erreurGenre(this.genre));
     let resultat = [this.valide, this.erreurGenre(this.genre)];
-    return resultat ; //retourne l'etat de l'objet lui-meme une fois traité
+    return resultat; //retourne l'etat de l'objet lui-meme une fois traité
   }
 }
 
@@ -240,7 +265,7 @@ function valider(event) {
 
   let objetFaux = 0; //creation d'une variable pour compter le nombre d'etat faux qu'il y aura apres la vérification de mes objets
   //mise en route de la boucle pour parcourir le tableau et créer des nouveaux objets dans un etat verifié
-  let enregistrement=true;
+  let enregistrement = true;
 
   champsQuestionnaire.forEach((objetChampsIndex) => {
     new valeurVerifiee(
@@ -256,37 +281,37 @@ function valider(event) {
         objetChampsIndex.valeur,
         objetChampsIndex.genre,
         objetChampsIndex.valide
-      ).retourTypeChamps()[0] === false && 
+      ).retourTypeChamps()[0] === false &&
       new valeurVerifiee(
         objetChampsIndex.titre,
         objetChampsIndex.valeur,
         objetChampsIndex.genre,
         objetChampsIndex.valide
-      ).retourTypeChamps()[1]!== "Parfait!"
+      ).retourTypeChamps()[1] !== "Parfait!"
     ) {
       objetFaux++; //on incremente tant qu'il y a des faux
       console.log(objetFaux);
+    } else if (
+      new valeurVerifiee(
+        objetChampsIndex.titre,
+        objetChampsIndex.valeur,
+        objetChampsIndex.genre,
+        objetChampsIndex.valide
+      ).retourTypeChamps()[0] === false &&
+      new valeurVerifiee(
+        objetChampsIndex.titre,
+        objetChampsIndex.valeur,
+        objetChampsIndex.genre,
+        objetChampsIndex.valide
+      ).retourTypeChamps()[1] === "Parfait!"
+    ) {
+      enregistrement = false;
     }
-    else if(
-      new valeurVerifiee(
-        objetChampsIndex.titre,
-        objetChampsIndex.valeur,
-        objetChampsIndex.genre,
-        objetChampsIndex.valide
-      ).retourTypeChamps()[0] === false && 
-      new valeurVerifiee(
-        objetChampsIndex.titre,
-        objetChampsIndex.valeur,
-        objetChampsIndex.genre,
-        objetChampsIndex.valide
-      ).retourTypeChamps()[1]=== "Parfait!"){
-        enregistrement = false;
-      }
-    
-  })
-    ;
+  });
 
-  function MajusculePremiere(lettre){return (lettre+'').charAt(0).toUpperCase()+lettre.substr(1);}//fonction pour mettre le premier caractère en majuscule d'une valeur string
+  function MajusculePremiere(lettre) {
+    return (lettre + "").charAt(0).toUpperCase() + lettre.substr(1);
+  } //fonction pour mettre le premier caractère en majuscule d'une valeur string
 
   //une fois tout ce parcours réalisé, nous pouvons verifier le nombre de faux, et ainsi en cas d'absence ou <1 nous pouvons lancer la suite des actions,
   //en appelant la fonction pour confirmer le formulaire et passer à l'etat des remerciements
@@ -304,10 +329,9 @@ function valider(event) {
 
     console.log(`votre prénom est : ${votrePrenom} - votre nom est : ${votreNom} - votre email est : ${votreMail} - votre date de naissance est :
     ${votreDate} - vous avez réalisé : ${votreNbrTournoi} tournoi(s) - la ville que vous avez choisi : ${votreVilleTournoi} - vous acceptez les 
-    conditions - vous voulez être au courant : ${(enregistrement)
-    }`);
+    conditions - vous voulez être au courant : ${enregistrement}`);
 
-    document.querySelector("form[name='reserve']").reset();//vider les champs apres la confirmation
+    document.querySelector("form[name='reserve']").reset(); //vider les champs apres la confirmation
   }
 }
 
