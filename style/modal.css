@@ -504,6 +504,7 @@ input[data-error]::after {
 @media screen and (min-width: 1000px) {/*retouche */
 .hero-section {
   height:auto; /*retouche */
+  max-height: 600px;
   border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
